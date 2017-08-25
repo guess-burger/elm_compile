@@ -40,21 +40,19 @@ defmodule Mix.Tasks.Compile.Elm do
   """
 
   def run(_args) do
-    unless Mix.env == :prod do
-      Mix.shell.info "Compiling Elm assets"
-      with :ok <- verify_elm_install(),
-           {:ok, elm_config} <- project_elm_config(),
-             :ok <- verify_source_dir(elm_config),
-             :ok <- verify_main_elm_file(elm_config),
-             :ok <- compile_elm_assets(elm_config),
-             :ok <- ensure_staging_area(elm_config),
-             :ok <- move_compiled_assets_to_staging_area(elm_config)
-        do
-        Mix.shell.info ~s{Elm assets compiled and moved to #{elm_config[:destination_dir]}.\n}
-        else
-          {:error, reason} ->
-            Mix.raise(reason)
-      end
+    Mix.shell.info "Compiling Elm assets"
+    with :ok <- verify_elm_install(),
+         {:ok, elm_config} <- project_elm_config(),
+           :ok <- verify_source_dir(elm_config),
+           :ok <- verify_main_elm_file(elm_config),
+           :ok <- compile_elm_assets(elm_config),
+           :ok <- ensure_staging_area(elm_config),
+           :ok <- move_compiled_assets_to_staging_area(elm_config)
+      do
+      Mix.shell.info ~s{Elm assets compiled and moved to #{elm_config[:destination_dir]}.\n}
+      else
+        {:error, reason} ->
+          Mix.raise(reason)
     end
   end
 
